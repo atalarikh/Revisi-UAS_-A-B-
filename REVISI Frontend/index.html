@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shoop - Login</title>
+    <style>
+        /* Mengatur dasar halaman agar menyerupai layar HP */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            background-color: #e0e0e0; 
+        }
+        .mobile-frame {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            min-height: 100vh;
+            padding: 40px 24px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Desain Teks & Logo */
+        .logo {
+            font-family: 'Brush Script MT', cursive, sans-serif;
+            font-size: 42px;
+            margin-top: 80px;
+            margin-bottom: 50px;
+            font-weight: bold;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Form Input */
+        .input-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        /* Tombol */
+        .btn-black {
+            width: 100%;
+            padding: 16px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 24px;
+        }
+        .btn-black:hover {
+            background-color: #333;
+        }
+        .btn-grey {
+            width: 100%;
+            padding: 16px;
+            background-color: #f2f2f2;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Pembatas (Or) */
+        .divider {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 24px;
+            color: #999;
+            font-size: 14px;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #eee;
+        }
+        .divider:not(:empty)::before { margin-right: 15px; }
+        .divider:not(:empty)::after { margin-left: 15px; }
+
+        /* Footer */
+        .footer-text {
+            margin-top: auto;
+            font-size: 11px;
+            color: #999;
+            text-align: center;
+            line-height: 1.6;
+        }
+        .footer-text span {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-frame">
+        <div class="logo">OnlineShoop</div>
+
+        <div class="title">Create an account</div>
+        <div class="subtitle">Enter your email to sign up for this app</div>
+
+        <div class="input-group">
+            <input type="email" id="emailInput" placeholder="email@domain.com">
+        </div>
+
+        <button class="btn-black" onclick="pindahKeHome()">Continue</button>
+
+        <div class="divider">or</div>
+
+        <button class="btn-grey">
+            <span style="color: #4285F4; font-weight: bold;">G</span> Continue with Google
+        </button>
+        <button class="btn-grey">
+             Continue with Apple
+        </button>
+
+        <div class="footer-text">
+            By clicking continue, you agree to our <span>Terms of Service</span><br>and <span>Privacy Policy</span>
+        </div>
+    </div>
+
+    <script>
+        // Logika untuk membuat tombolnya "maju"
+        function pindahKeHome() {
+            let email = document.getElementById('emailInput').value;
+            
+            if (email === "") {
+                alert("Ups! Jangan lupa isi email kamu dulu ya.");
+            } else {
+                // Perintah untuk pindah ke file home.html
+                window.location.href = "home.html"; 
+            }
+        }
+    </script>
+
+</body>
+</html>

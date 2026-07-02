@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Shoop - Home</title>
+    <style>
+        /* Desain Background Desktop */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; 
+            margin: 0; 
+            background-color: #d1d5db; /* Warna background abu-abu di luar HP */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; /* Posisikan HP di tengah layar */
+            min-height: 100vh; 
+        }
+        
+        /* Bodi iPhone 17 */
+        .mobile-frame { 
+            width: 390px; /* Lebar standar layar iPhone */
+            height: 844px; /* Tinggi standar layar iPhone */
+            background: white; 
+            padding: 60px 20px 20px 20px; /* Jarak ekstra di atas agar tidak tertutup kamera */
+            box-sizing: border-box; 
+            border: 14px solid #1a1a1a; /* Bezel / Pinggiran HP warna hitam */
+            border-radius: 45px; /* Sudut HP yang melengkung */
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3); /* Efek bayangan HP ke meja */
+            overflow-y: auto; /* Biar isinya bisa di-scroll */
+        }
+
+        /* Kamera Depan iPhone (Dynamic Island) */
+        .mobile-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 32px;
+            background-color: #1a1a1a;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            z-index: 999;
+        }
+
+        /* Menyembunyikan scrollbar bawaan agar lebih mirip layar sentuh HP */
+        .mobile-frame::-webkit-scrollbar { display: none; }
+
+        /* Navigasi Atas Baru */
+        .top-nav { display: flex; justify-content: space-between; margin-bottom: 15px; font-weight: bold; font-size: 14px; }
+        .top-nav span { cursor: pointer; padding: 5px; color: #333; }
+        
+        /* Header & Teks */
+        .logo { font-family: 'Brush Script MT', cursive, serif; font-size: 32px; font-weight: bold; }
+        .subtitle { font-size: 14px; color: #666; margin-bottom: 25px; margin-top: 5px; }
+        
+        /* Search Bar */
+        .search-bar { width: 100%; padding: 12px 20px; border-radius: 25px; border: 1px solid #ddd; background: #f9f9f9; margin-bottom: 20px; box-sizing: border-box; font-size: 14px; outline: none; }
+        
+        /* Kategori (Tab Merah) */
+        .categories { display: flex; gap: 10px; margin-bottom: 25px; overflow-x: auto; padding-bottom: 5px; }
+        .categories::-webkit-scrollbar { display: none; } 
+        .category { padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; background: #f0f0f0; color: #333; white-space: nowrap; }
+        .category.active { background: #d32f2f; color: white; }
+        
+        /* Daftar Produk */
+        .product-card { display: flex; gap: 15px; margin-bottom: 25px; cursor: pointer; align-items: center; }
+        .product-card img { width: 85px; height: 85px; object-fit: cover; border-radius: 12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .product-info { display: flex; flex-direction: column; }
+        .product-title { font-size: 15px; font-weight: bold; margin: 0 0 6px 0; color: #111; }
+        .product-price { color: #d32f2f; font-weight: bold; margin: 0 0 6px 0; font-size: 16px; }
+        .product-stats { font-size: 12px; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-frame">
+        <div class="top-nav">
+            <span onclick="window.location.href='index.html'">⬅️ Kembali</span>
+            <div style="display: flex; gap: 15px;">
+                <span onclick="alert('Fitur Pesanan Saya akan dibuat di halaman terpisah!')">📦 Pesanan</span>
+                <span onclick="window.location.href='checkout.html'">🛒 Keranjang</span>
+            </div>
+        </div>
+
+        <div class="logo">OnlineShoop</div>
+        <div class="subtitle">order your favorite</div>
+        
+        <input type="text" class="search-bar" placeholder="🔍 search">
+        
+        <div class="categories">
+            <div class="category active">All</div>
+            <div class="category">Celana</div>
+            <div class="category">Jaket</div>
+            <div class="category">Sepatu</div>
+        </div>
+
+        <div id="product-list">
+            <p style="text-align: center; color: #888; font-size: 14px;">Memuat produk dari server...</p>
+        </div>
+    </div>
+
+    <script>
+        async function loadProducts() {
+            try {
+                const response = await fetch('http://localhost:5000/api/products');
+                const products = await response.json();
+                
+                const container = document.getElementById('product-list');
+                container.innerHTML = ''; 
+
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    
+                    card.onclick = () => {
+                        localStorage.setItem('selectedProduct', JSON.stringify(product));
+                        window.location.href = 'detail.html';
+                    };
+
+                    card.innerHTML = `
+                        <img src="${product.img}" alt="${product.name}">
+                        <div class="product-info">
+                            <p class="product-title">${product.name}</p>
+                            <p class="product-price">Rp. ${product.price.toLocaleString('id-ID')}</p>
+                            <p class="product-stats">⭐ ${product.rating} | ${product.sold} terjual</p>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                document.getElementById('product-list').innerHTML = 
+                    '<p style="color:red; font-size:13px; text-align:center;">⚠️ Gagal memuat produk. Pastikan server.js menyala!</p>';
+            }
+        }
+
+        loadProducts();
+    </script>
+
+</body>
+</html>
