@@ -47,6 +47,30 @@ app.post('/api/checkout', (req, res) => {
 
     res.json({ success: true, data: newOrder });
 });
+    // ✅ KEUANGAN ADMIN
+app.get('/api/keuangan', (req, res) => {
+  const total = orders.reduce((sum, item) => sum + item.price, 0)
+
+  res.json({
+    total: total,
+    jumlahOrder: orders.length
+  })
+})
+function prosesJNT(button) {
+  // Logika untuk API pengiriman J&T
+  alert("Memproses pengiriman via J&T...");
+  // Opsional: Ubah teks tombol atau disable setelah diklik
+  button.innerText = "Diproses...";
+  button.disabled = true;
+  button.style.opacity = "0.5";
+}
+
+function tandaiSukses(button) {
+  // Logika untuk mengubah status pesanan di database
+  alert("Pesanan ditandai sukses!");
+  // Opsional: Sembunyikan item pesanan atau ubah warnanya
+  button.parentElement.parentElement.style.opacity = "0.5";
+}
 
 // Jalankan Server
 const PORT = 5000;
