@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Produk Admin</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  display: flex;
+  justify-content: center;
+}
+
+/* Frame HP */
+.phone {
+  width: 320px;
+  height: 640px;
+  background: #fff;
+  border-radius: 40px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Title */
+h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+/* Tombol tersedia */
+.status {
+  background: rgb(192, 4, 4);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+/* Produk */
+.product {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.product img {
+  width: 70px;
+  height: 70px;
+  border-radius: 15px;
+  object-fit: cover;
+  background: #eee;
+}
+
+/* Info */
+.info {
+  margin-left: 15px;
+}
+
+.name {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.price {
+  font-size: 13px;
+  color: gray;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+/* Kembali */
+.back {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+}
+</style>
+
+</head>
+<body>
+
+<div class="phone">
+
+  <h1>Produk Admin</h1>
+
+  <div class="status">Tersedia</div>
+
+  <!-- Produk 1 -->
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=200&q=80">
+    <div class="info">
+      <div class="name">Celana jogger pendek</div>
+      <div class="price">Rp. 80.000 &nbsp;&nbsp; </div>
+    </div>
+  </div>
+
+  <!-- Produk 2 -->
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=200&q=80">
+    <div class="info">
+      <div class="name">Jaket Runing</div>
+      <div class="price">Rp. 120.000 &nbsp;&nbsp; </div>
+    </div>
+  </div>
+
+  <!-- Produk 3 -->
+  <div class="product">
+    <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=200&q=80">
+    <div class="info">
+      <div class="name">Sepatu Adidas Biru</div>
+      <div class="price">Rp. 150.000 &nbsp;&nbsp;</div>
+    </div>
+  </div>
+
+
+  <div class="btn-logout" onclick="window.location.href='admin.html'">⬅️ Kembali</div>
+
+</div>
+
+</body>
+</html>

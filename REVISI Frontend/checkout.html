@@ -20,40 +20,105 @@
 <body>
 
     <div class="mobile-frame">
-        <div class="header" onclick="window.location.href='home.html'">⬅️ Kembali</div>
-        <h2>Checkout</h2>
-        <div id="wadah-keranjang"></div>
-        <div class="summary">
-            <p>Total: <span id="chk-total">Rp 0</span></p>
-            <button class="btn-order" onclick="prosesOrder()">Order Sekarang</button>
-        </div>
+    <a href="home.html" class="btn-kembali">⬅️ Kembali</a>
+    <h2>Checkout</h2>
+
+    <div id="wadah-keranjang"></div>
+
+    <div class="pilihan-metode">
+        <label style="font-weight: bold;">Pilih Metode Pembayaran:</label>
+        <select id="metode">
+            <option value="QRIS">QRIS</option>
+            <option value="Transfer Bank">Transfer Bank</option>
+            <option value="COD">COD (Bayar di Tempat)</option>
+        </select>
     </div>
 
-    <script>
-        // Logika untuk menampilkan barang
-        const keranjang = JSON.parse(localStorage.getItem('keranjang')) || [];
-        const wadah = document.getElementById('wadah-keranjang');
-        let total = 0;
+    <div class="total-section">
+        Total: <span id="chk-total">Rp 0</span>
+    </div>
 
-        keranjang.forEach(item => {
-            total += item.price;
-            wadah.innerHTML += `
-                <div class="item-card">
-                    <img src="${item.img}">
-                    <div><div>${item.name}</div><div>Rp ${item.price.toLocaleString()}</div></div>
+    <button class="btn-order" onclick="prosesOrder()">Order Sekarang</button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Ambil data keranjang dari memori browser
+    const keranjang = JSON.parse(localStorage.getItem('keranjang')) || [];
+    const wadah = document.getElementById('wadah-keranjang');
+    let total = 0;
+
+    // 2. Cek apakah keranjang kosong
+    if (keranjang.length === 0) {
+        wadah.innerHTML = "<p style='color:gray; text-align:center; margin-top:20px;'>Keranjang Anda kosong belom ada barang.</p>";
+        document.getElementById('chk-total').innerText = "Rp 0";
+        return;
+    }
+
+    // 3. Bersihkan wadah dan render produk yang ada di keranjang
+    wadah.innerHTML = "";
+    keranjang.forEach(item => {
+        total += item.price; // Tambahkan harga produk ke total
+        
+        wadah.innerHTML += `
+            <div class="item-card">
+                <img src="${item.img || 'https://via.placeholder.com/60'}" alt="${item.name}">
+                <div class="item-info">
+                    <p><strong>${item.name}</strong></p>
+                    <p style="color: #e44d26;">Rp ${item.price.toLocaleString('id-ID')}</p>
                 </div>
-            `;
-        });
-        document.getElementById('chk-total').innerText = "Rp " + total.toLocaleString();
+            </div>
+        `;
+    });
 
-        function prosesOrder() {
-            let dataPesanan = JSON.parse(localStorage.getItem('pesananMasuk')) || [];
-            dataPesanan.push({ barang: keranjang, totalBayar: total, tanggal: new Date().toLocaleString() });
-            localStorage.setItem('pesananMasuk', JSON.stringify(dataPesanan));
-            alert("Pesanan Berhasil!");
-            localStorage.removeItem('keranjang');
-            window.location.href = 'home.html';
-        }
-    </script>
+    // 4. Tampilkan total harga dengan format rupiah
+    document.getElementById('chk-total').innerText = "Rp " + total.toLocaleString('id-ID');
+});
+
+// 5. Fungsi ketika tombol "Order Sekarang" diklik
+function prosesOrder() {
+    let keranjang = JSON.parse(localStorage.getItem('keranjang')) || [];
+    if (keranjang.length === 0) {
+        alert("Keranjang belanja Anda kosong! Silakan tambahkan barang dulu di toko.");
+        return;
+    }
+
+    // Hitung total nilai belanja
+    let totalBelanja = 0;
+    keranjang.forEach(item => {
+        totalBelanja += item.price;
+    });
+
+    // Ambil opsi pembayaran yang dipilih oleh user
+    let metodeElement = document.getElementById('metode');
+    let metodeTerpilih = metodeElement ? metodeElement.value : "QRIS";
+
+    // Buat data transaksi baru yang lengkap & aman (anti-undefined)
+    let pesananBaru = {
+        id: "ORD-" + Math.floor(100000 + Math.random() * 900000), // Membuat nomor ID acak unik
+        barang: keranjang,
+        total: totalBelanja,          // Untuk script admin versi baru
+        totalBayar: totalBelanja,     // Cadangan untuk script admin versi lama
+        waktu: new Date().toLocaleString('id-ID'),
+        tanggal: new Date().toLocaleString('id-ID'), 
+        metode: metodeTerpilih
+    };
+
+    // Ambil data antrean pesanan yang sudah ada di admin, lalu tumpuk dengan pesanan baru
+    let dataPesananAdmin = JSON.parse(localStorage.getItem('pesananMasuk')) || [];
+    dataPesananAdmin.push(pesananBaru);
+    localStorage.setItem('pesananMasuk', JSON.stringify(dataPesananAdmin));
+
+    // Notifikasi sukses
+    alert("Pesanan Berhasil Dibuat! Silakan cek dashboard admin.");
+    
+    // Kosongkan keranjang belanja karena sudah dibeli
+    localStorage.removeItem('keranjang');
+    
+    // Lempar kembali user ke halaman toko utama
+    window.location.href = 'home.html';
+}
+</script>
+
 </body>
 </html>

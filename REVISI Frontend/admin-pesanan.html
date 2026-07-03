@@ -2,56 +2,108 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Pesanan & Keuangan - iPhone 17</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Keuangan & Pesanan</title>
     <style>
-        /* CSS Bingkai iPhone 17 */
-        body { margin: 0; background-color: #d1d5db; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: -apple-system, sans-serif; }
-        .mobile-frame { width: 390px; height: 844px; background: white; padding: 60px 20px 20px 20px; border: 14px solid #1a1a1a; border-radius: 45px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.3); overflow-y: auto; box-sizing: border-box; }
-        .mobile-frame::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 32px; background-color: #1a1a1a; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 999; }
-        .mobile-frame::-webkit-scrollbar { display: none; }
-
-        /* Konten Halaman */
-        .header { font-weight: bold; cursor: pointer; margin-bottom: 20px; }
-        .card { border: 1px solid #eee; padding: 15px; border-radius: 12px; margin-bottom: 15px; background: #fafafa; }
-        .title { font-weight: bold; font-size: 16px; margin-bottom: 10px; }
-        .total-box { background: #000; color: #fff; padding: 20px; border-radius: 12px; margin-bottom: 20px; text-align: center; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 400px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .back-link { color: #007BFF; text-decoration: none; font-size: 14px; display: inline-block; margin-bottom: 15px; }
+        .revenue-box { background-color: #1a1a1a; color: white; text-align: center; padding: 20px; border-radius: 12px; margin-bottom: 25px; }
+        .revenue-box p { margin: 0; font-size: 12px; color: #ccc; }
+        .revenue-box h2 { margin: 5px 0 0 0; font-size: 24px; }
+        .order-item { border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 15px; }
+        .order-item p { margin: 4px 0; font-size: 14px; }
+        .order-time { color: #777; font-size: 12px !important; }
+        .order-total { font-weight: bold; font-size: 15px !important; margin-top: 8px !important; }
+        .action-buttons { display: flex; gap: 10px; margin-top: 12px; }
+        .btn { flex: 1; padding: 10px; border: none; border-radius: 6px; color: white; font-weight: bold; cursor: pointer; font-size: 13px; }
+        .btn-jnt { background-color: #e74c3c; }
+        .btn-success { background-color: #4CAF50; }
+        
+        /* Pesan jika semua order kosong */
+        .empty-state { text-align: center; color: #777; font-style: italic; display: none; padding: 20px 0;}
     </style>
 </head>
 <body>
 
-    <div class="mobile-frame">
-        <div class="back-link" onclick="window.location.href='admin.html'">⬅️ Kembali ke Dashboard</div>
-        
+    <div class="container">
+        <a href="admin.html" class="back-link">⬅️ Kembali ke Dashboard</a>
         <h2>Keuangan</h2>
-        <div class="total-box">
-            <div style="font-size: 12px;">Total Pendapatan</div>
-            <div id="total-pendapatan" style="font-size: 24px; font-weight: bold;">Rp 0</div>
+
+        <div class="revenue-box">
+            <p>Total Pendapatan</p>
+            <h2 id="total-pendapatan">Rp 0</h2>
         </div>
 
         <h2>Daftar Pesanan</h2>
-        <div id="list-pesanan"></div>
-    </div>
+<div id="wadah-pesanan"></div>
 
-    <script>
-        const pesananMasuk = JSON.parse(localStorage.getItem('pesananMasuk')) || [];
-        const listContainer = document.getElementById('list-pesanan');
-        let totalUang = 0;
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tampilkan Saldo Pendapatan
+    let saldoTersimpan = localStorage.getItem('totalPendapatan') || 0;
+    let elemenKeuangan = document.getElementById('total-pendapatan'); 
+    if (elemenKeuangan) {
+        elemenKeuangan.innerText = 'Rp ' + parseInt(saldoTersimpan).toLocaleString('id-ID');
+    }
 
-        if (pesananMasuk.length === 0) {
-            listContainer.innerHTML = "<p>Tidak ada pesanan.</p>";
+    // Ambil data pesanan
+    let daftarPesanan = JSON.parse(localStorage.getItem('pesananMasuk')) || [];
+    let wadah = document.getElementById('wadah-pesanan');
+
+    if (wadah) {
+        if (daftarPesanan.length === 0) {
+            wadah.innerHTML = "<p style='text-align:center; color:gray; margin-top:20px;'>Belum ada pesanan masuk.</p>";
         } else {
-            pesananMasuk.forEach(order => {
-                totalUang += order.totalBayar;
-                listContainer.innerHTML += `
-                    <div class="card">
-                        <div class="title">ID: ${order.idOrder}</div>
-                        <div style="font-size: 13px; color: #666;">Waktu: ${order.tanggal}</div>
-                        <div style="font-weight: bold; margin-top: 10px;">Total: Rp ${order.totalBayar.toLocaleString()}</div>
+            wadah.innerHTML = ""; // Bersihkan wadah sebelum diisi
+            
+            daftarPesanan.forEach((order, index) => {
+                // PROTEKSI KEBAL ERROR: Mengambil data dari format lama ATAU baru agar tidak crash
+                let idPesanan = order.id || "ORD-" + Math.floor(1000 + Math.random() * 9000);
+                let waktuPesanan = order.waktu || order.tanggal || "Waktu tidak tercatat";
+                let totalPesanan = order.total || order.totalBayar || 0;
+                let metodePesanan = order.metode || "QRIS";
+
+                wadah.innerHTML += `
+                    <div class="order-item" style="background:#fff; padding:15px; margin-bottom:15px; border-radius:10px; box-shadow:0 2px 5px rgba(0,0,0,0.1); border: 1px solid #ddd;">
+                        <p style="margin:5px 0;"><strong>ID:</strong> ${idPesanan}</p>
+                        <p style="margin:5px 0; font-size:12px; color:gray;">Waktu: ${waktuPesanan}</p>
+                        <p style="margin:5px 0;"><strong>Total:</strong> Rp ${Number(totalPesanan).toLocaleString('id-ID')}</p>
+                        <p style="margin:5px 0;"><strong>Metode:</strong> ${metodePesanan}</p>
+                        <div style="display:flex; gap:10px; margin-top:10px;">
+                            <button style="background-color: #dc3545; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer; flex: 1;" onclick="kirimJNT(${index})">Kirim via J&T</button>
+                            <button style="background-color: #28a745; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer; flex: 1;" onclick="tandaiSukses(${index})">Sukses</button>
+                        </div>
                     </div>
                 `;
             });
         }
-        document.getElementById('total-pendapatan').innerText = "Rp " + totalUang.toLocaleString();
+    }
+});
+
+// Fungsi tombol Sukses
+function tandaiSukses(index) {
+    let daftarPesanan = JSON.parse(localStorage.getItem('pesananMasuk')) || [];
+    let pesananSelesai = daftarPesanan[index];
+    
+    let totalPesanan = pesananSelesai.total || pesananSelesai.totalBayar || 0;
+
+    // Tambah nominal ke Total Pendapatan
+    let saldoLama = parseInt(localStorage.getItem('totalPendapatan')) || 0;
+    localStorage.setItem('totalPendapatan', saldoLama + parseInt(totalPesanan));
+
+    // Hapus pesanan dari antrean
+    daftarPesanan.splice(index, 1);
+    localStorage.setItem('pesananMasuk', JSON.stringify(daftarPesanan));
+
+    alert("Pesanan berhasil diselesaikan!");
+    location.reload();
+}
+
+// Fungsi tombol J&T biar tidak eror saat diklik
+function kirimJNT(index) {
+    alert("Pesanan diproses untuk dikirim via J&T!");
+}
     </script>
 </body>
 </html>

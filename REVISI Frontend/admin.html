@@ -2,51 +2,69 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin</title>
     <style>
-        body { margin: 0; background-color: #d1d5db; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: sans-serif; }
-        .mobile-frame { width: 390px; height: 844px; background: white; padding: 60px 20px 20px 20px; border: 14px solid #1a1a1a; border-radius: 45px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.3); overflow-y: auto; box-sizing: border-box; display: flex; flex-direction: column; }
-        .mobile-frame::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 32px; background-color: #1a1a1a; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; z-index: 999; }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 400px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .back-link { color: #007BFF; text-decoration: none; font-size: 14px; display: inline-block; margin-bottom: 15px; }
         
-        .btn-logout { width: 100%; text-align: left; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
-        .brand-title { font-size: 32px; font-weight: bold; margin-bottom: 30px; }
+        .grid-dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; text-align: center; }
+        .box-title { background-color: #1a1a1a; color: white; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; text-decoration: none; display: block;}
+        .box-value h2 { margin: 15px 0 5px 0; font-size: 22px; color: #333; }
+        .box-value p { margin: 0; font-size: 12px; color: #777; }
         
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .btn-black { background: black; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; }
-        
-        .info-card { background: #f9f9f9; border: 1px solid #eee; border-radius: 12px; padding: 15px; text-align: center; }
-        .info-number { font-size: 20px; font-weight: bold; }
-        .info-label { font-size: 11px; color: #666; margin-top: 5px; }
-        
-        .btn-tambah { background: #d32f2f; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: auto; }
+        .main-btn { display: block; width: 100%; background-color: #d9534f; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; margin-bottom: 15px; cursor: pointer; font-size: 15px; }
     </style>
 </head>
 <body>
-    <div class="mobile-frame">
-        <div class="btn-logout" onclick="window.location.href='admin-login.html'">⬅️ Logout</div>
-        <div class="brand-title">Dashboard Admin</div>
 
-        <div class="grid-container">
-            <button class="btn-black" onclick="window.location.href='admin-pesanan.html'">Pesanan</button>
-            <button class="btn-black">Keuangan</button>
-            <div class="info-card">
-                <div class="info-number" id="angka-dikirim">0</div>
-                <div class="info-label">Perlu Dikirim</div>
+    <div class="container">
+        <a href="admin-login.html" class="back-link">⬅️ Logout</a>
+        <h1>Dashboard Admin</h1>
+
+        <div class="grid-dashboard">
+            <div>
+                <a href="admin-pesanan.html" class="box-title">Pesanan</a>
+                <div class="box-value">
+                    <h2 id="jumlah-pesanan">0</h2>
+                    <p>Perlu Dikirim</p>
+                </div>
             </div>
-            <div class="info-card">
-                <div class="info-number" id="angka-keuangan">Rp 0</div>
-                <div class="info-label">Pendapatan</div>
+
+            <div>
+                <div class="box-title" style="cursor: default;">Keuangan</div>
+                <div class="box-value">
+                    <h2 id="dashboard-pendapatan">Rp 0</h2>
+                    <p>Pendapatan</p>
+                </div>
             </div>
         </div>
 
-        <button class="btn-tambah" onclick="window.location.href='tambah-produk.html'">+ Tambah Produk</button>
+        <button class="main-btn">Tambah Produk</button>
+        <button class="main-btn">Lihat Produk</button>
     </div>
 
     <script>
-        const pesananMasuk = JSON.parse(localStorage.getItem('pesananMasuk')) || [];
-        document.getElementById('angka-dikirim').innerText = pesananMasuk.length;
-        let total = pesananMasuk.reduce((sum, order) => sum + order.totalBayar, 0);
-        document.getElementById('angka-keuangan').innerText = "Rp " + total.toLocaleString('id-ID');
+        document.addEventListener('DOMContentLoaded', function() {
+    // Ambil data pesanan
+    let daftarPesanan = JSON.parse(localStorage.getItem('pesananMasuk')) || [];
+    
+    // Cari elemen angka 0 di HTML Anda (misal kita asumsikan Anda beri id="jumlah-pesanan")
+    // Kalau di HTML Anda belum ada id="jumlah-pesanan", tambahkan id tersebut di tag angkanya.
+    let elemenJumlah = document.getElementById('jumlah-pesanan'); 
+    
+    if(elemenJumlah) {
+        elemenJumlah.innerText = daftarPesanan.length; // Ubah teks jadi jumlah pesanan
+    }
+
+    // Tampilkan Saldo di Dashboard
+    let saldo = localStorage.getItem('totalPendapatan') || 0;
+    let elemenSaldo = document.getElementById('saldo-dashboard');
+    if(elemenSaldo) {
+        elemenSaldo.innerText = 'Rp ' + parseInt(saldo).toLocaleString('id-ID');
+    }
+});
     </script>
 </body>
 </html>
