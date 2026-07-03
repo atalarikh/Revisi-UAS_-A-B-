@@ -1,134 +1,246 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Produk Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produk Admin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .admin-frame {
+            width: 100%;
+            max-width: 450px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            padding: 25px;
+            box-sizing: border-box;
+        }
+        .btn-back {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .badge-status {
+            background-color: #a94442;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        /* Form Tambah Produk (Tersembunyi di Awal) */
+        .form-tambah {
+            display: none;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        /* Tombol Utama */
+        .btn-trigger {
+            color: #007bff;
+            text-decoration: underline;
+            cursor: pointer;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .btn-simpan {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        .btn-simpan:hover {
+            background-color: #218838;
+        }
 
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-  display: flex;
-  justify-content: center;
-}
-
-/* Frame HP */
-.phone {
-  width: 320px;
-  height: 640px;
-  background: #fff;
-  border-radius: 40px;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* Title */
-h1 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-/* Tombol tersedia */
-.status {
-  background: rgb(192, 4, 4);
-  color: white;
-  padding: 8px 20px;
-  border-radius: 10px;
-  display: inline-block;
-  margin-bottom: 20px;
-}
-
-/* Produk */
-.product {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.product img {
-  width: 70px;
-  height: 70px;
-  border-radius: 15px;
-  object-fit: cover;
-  background: #eee;
-}
-
-/* Info */
-.info {
-  margin-left: 15px;
-}
-
-.name {
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-
-.price {
-  font-size: 13px;
-  color: gray;
-}
-
-/* Button */
-.btn {
-  width: 100%;
-  padding: 12px;
-  background: black;
-  color: white;
-  border: none;
-  border-radius: 10px;
-  margin-top: 20px;
-  font-size: 14px;
-}
-
-/* Kembali */
-.back {
-  text-align: center;
-  margin-top: 10px;
-  font-weight: bold;
-}
-</style>
-
+        /* Daftar List Produk */
+        .product-list {
+            margin-top: 15px;
+        }
+        .product-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .product-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background-color: #ddd;
+        }
+        .product-info h4 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+        .product-info p {
+            margin: 0;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="phone">
+<div class="admin-frame">
+    <a href="admin.html" class="btn-back">⬅️ Kembali</a>
+    <h2>Produk Admin</h2>
 
-  <h1>Produk Admin</h1>
-
-  <div class="status">Tersedia</div>
-
-  <!-- Produk 1 -->
-  <div class="product">
-    <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=200&q=80">
-    <div class="info">
-      <div class="name">Celana jogger pendek</div>
-      <div class="price">Rp. 80.000 &nbsp;&nbsp; </div>
+    <div id="boxFormTambah" class="form-tambah">
+        <h3>Input Produk Baru</h3>
+        <div class="form-group">
+            <label>URL / Link Foto Produk</label>
+            <input type="text" id="inputFoto" placeholder="Contoh: https://site.com/sepatu.jpg atau img/sepatu.jpg">
+        </div>
+        <div class="form-group">
+            <label>Nama Produk</label>
+            <input type="text" id="inputNama" placeholder="Masukkan nama barang">
+        </div>
+        <div class="form-group">
+            <label>Harga (Rupiah)</label>
+            <input type="number" id="inputHarga" placeholder="Contoh: 150000">
+        </div>
+        <button class="btn-simpan" onclick="simpanProdukBaru()">💾 Simpan Produk</button>
     </div>
-  </div>
-
-  <!-- Produk 2 -->
-  <div class="product">
-    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=200&q=80">
-    <div class="info">
-      <div class="name">Jaket Runing</div>
-      <div class="price">Rp. 120.000 &nbsp;&nbsp; </div>
-    </div>
-  </div>
-
-  <!-- Produk 3 -->
-  <div class="product">
-    <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=200&q=80">
-    <div class="info">
-      <div class="name">Sepatu Adidas Biru</div>
-      <div class="price">Rp. 150.000 &nbsp;&nbsp;</div>
-    </div>
-  </div>
 
 
-  <div class="btn-logout" onclick="window.location.href='admin.html'">⬅️ Kembali</div>
 
+    <div class="btn-trigger" id="tombolTambah" onclick="bukaForm()">+ Tambah Produk Baru</div>
 </div>
+
+<script>
+// 1. Fungsi untuk Menampilkan Input Form saat teks Tambah Produk di-klik
+function bukaForm() {
+    document.getElementById('boxFormTambah').style.display = 'block';
+    document.getElementById('tombolTambah').style.style.display = 'none'; // Sembunyikan pemicunya sementara
+}
+
+// 2. Fungsi Eksekusi & Menyimpan data ke database lokal (localStorage)
+function simpanProdukBaru() {
+    let foto = document.getElementById('inputFoto').value.trim();
+    let nama = document.getElementById('inputNama').value.trim();
+    let harga = document.getElementById('inputHarga').value.trim();
+
+    // Validasi input agar tidak boleh kosong
+    if (!foto || !nama || !harga) {
+        alert("Harap lengkapi semua kolom Foto, Nama, dan Harga terlebih dahulu!");
+        return;
+    }
+
+    // Buat objek struktur produk baru
+    let produkBaru = {
+        foto: foto,
+        nama: nama,
+        harga: parseInt(harga)
+    };
+
+    // Ambil database produk yang sudah ada di localStorage atau buat array baru jika masih kosong
+    let listProduk = JSON.parse(localStorage.getItem('listProdukEcom')) || [];
+    listProduk.push(produkBaru);
+    localStorage.setItem('listProdukEcom', JSON.stringify(listProduk));
+
+    // Reset isi form kolom input
+    document.getElementById('inputFoto').value = '';
+    document.getElementById('inputNama').value = '';
+    document.getElementById('inputHarga').value = '';
+    
+    // Sembunyikan kembali form input
+    document.getElementById('boxFormTambah').style.display = 'none';
+    document.getElementById('tombolTambah').style.display = 'inline-block';
+
+    // Perbarui daftar produk di layar
+    muatProdukDariStorage();
+    alert("Produk berhasil ditambahkan!");
+}
+
+// 3. Fungsi Render untuk menampilkan data dinamis dari memori lokal
+function muatProdukDariStorage() {
+    let listProduk = JSON.parse(localStorage.getItem('listProdukEcom')) || [];
+    let kontainerDaftar = document.getElementById('daftarProdukAdmin');
+    
+    // Simpan template bawaan awal agar produk default tidak hilang saat di-refresh
+    let htmlDefault = `
+        <div class="product-item">
+            <img src="img/celana.jpg" alt="Celana">
+            <div class="product-info">
+                <h4>Celana jogger pendek</h4>
+                <p>Rp 80.000</p>
+            </div>
+        </div>
+        <div class="product-item">
+            <img src="img/jaket.jpg" alt="Jaket">
+            <div class="product-info">
+                <h4>Jaket Runing</h4>
+                <p>Rp 120.000</p>
+            </div>
+        </div>
+        <div class="product-item">
+            <img src="img/sepatu.jpg" alt="Sepatu">
+            <div class="product-info">
+                <h4>Sepatu Adidas Biru</h4>
+                <p>Rp 150.000</p>
+            </div>
+        </div>
+    `;
+
+    // Looping data tambahan dari array data baru
+    listProduk.forEach(function(item) {
+        htmlDefault += `
+            <div class="product-item">
+                <img src="${item.foto}" alt="${item.nama}" onerror="this.src='https://placehold.co/60'">
+                <div class="product-info">
+                    <h4>${item.nama}</h4>
+                    <p>Rp ${item.harga.toLocaleString('id-ID')}</p>
+                </div>
+            </div>
+        `;
+    });
+
+    kontainerDaftar.innerHTML = htmlDefault;
+}
+
+// Jalankan fungsi muat otomatis saat halaman dimuat pertama kali
+document.addEventListener('DOMContentLoaded', muatProdukDariStorage);
+</script>
 
 </body>
 </html>

@@ -5,66 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Admin</title>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 400px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .back-link { color: #007BFF; text-decoration: none; font-size: 14px; display: inline-block; margin-bottom: 15px; }
-        
-        .grid-dashboard { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; text-align: center; }
-        .box-title { background-color: #1a1a1a; color: white; padding: 15px; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; text-decoration: none; display: block;}
-        .box-value h2 { margin: 15px 0 5px 0; font-size: 22px; color: #333; }
-        .box-value p { margin: 0; font-size: 12px; color: #777; }
-        
-        .main-btn { display: block; width: 100%; background-color: #d9534f; color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; margin-bottom: 15px; cursor: pointer; font-size: 15px; }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .admin-frame {
+            width: 100%;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            padding: 25px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .btn-logout {
+            text-decoration: none;
+            color: #d9534f;
+            font-weight: bold;
+            font-size: 14px;
+            align-self: flex-start;
+        }
+        h2 {
+            margin: 5px 0 15px 0;
+            color: #333;
+        }
+        .stats-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        /* Mengubah area card menjadi link klik langsung yang aman */
+        .stat-card {
+            flex: 1;
+            background-color: #1a1a1a;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .stat-card:hover {
+            background-color: #333;
+        }
+        .stat-card span {
+            display: block;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        .stat-card h3 {
+            margin: 5px 0 0 0;
+            font-size: 18px;
+        }
+        /* Styling Tombol Aksi */
+        .btn-aksi {
+            display: block;
+            width: 100%;
+            background-color: #d9534f;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            padding: 12px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-sizing: border-box;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s;
+        }
+        .btn-aksi:hover {
+            background-color: #c9302c;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <a href="admin-login.html" class="back-link">⬅️ Logout</a>
-        <h1>Dashboard Admin</h1>
+<div class="admin-frame">
+    <a href="admin-login.html" class="btn-logout">⬅️ Logout</a>
+    <h2>Dashboard Admin</h2>
 
-        <div class="grid-dashboard">
-            <div>
-                <a href="admin-pesanan.html" class="box-title">Pesanan</a>
-                <div class="box-value">
-                    <h2 id="jumlah-pesanan">0</h2>
-                    <p>Perlu Dikirim</p>
-                </div>
-            </div>
+    <div class="stats-container">
+        <a href="admin-pesanan.html" class="stat-card">
+            <h3 style="margin:0; font-size:14px; color:#fff;">Pesanan</h3>
+            <h3 id="jumlah-pesanan">0</h3>
+            <span>Perlu Dikirim</span>
+        </a>
 
-            <div>
-                <div class="box-title" style="cursor: default;">Keuangan</div>
-                <div class="box-value">
-                    <h2 id="dashboard-pendapatan">Rp 0</h2>
-                    <p>Pendapatan</p>
-                </div>
-            </div>
-        </div>
-
-        <button class="main-btn">Tambah Produk</button>
-        <button class="main-btn">Lihat Produk</button>
+        <a href="admin-keuangan.html" class="stat-card">
+            <h3 style="margin:0; font-size:14px; color:#fff;">Keuangan</h3>
+            <h3 id="total-pendapatan">Rp 0</h3>
+            <span>Pendapatan</span>
+        </a>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    // Ambil data pesanan
-    let daftarPesanan = JSON.parse(localStorage.getItem('pesananMasuk')) || [];
-    
-    // Cari elemen angka 0 di HTML Anda (misal kita asumsikan Anda beri id="jumlah-pesanan")
-    // Kalau di HTML Anda belum ada id="jumlah-pesanan", tambahkan id tersebut di tag angkanya.
-    let elemenJumlah = document.getElementById('jumlah-pesanan'); 
-    
-    if(elemenJumlah) {
-        elemenJumlah.innerText = daftarPesanan.length; // Ubah teks jadi jumlah pesanan
+    <a href="produk-admin.html" class="btn-aksi">Tambah Produk</a>
+    <a href="lihat-produk.html" class="btn-aksi" style="background-color: #e44d26;">Lihat Produk</a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Muat & Hitung Total Antrean Pesanan Masuk
+    const pesananMasuk = JSON.parse(localStorage.getItem('pesananMasuk')) || [];
+    const elemenPesanan = document.getElementById('jumlah-pesanan');
+    if (elemenPesanan) {
+        elemenPesanan.innerText = pesananMasuk.length;
     }
 
-    // Tampilkan Saldo di Dashboard
-    let saldo = localStorage.getItem('totalPendapatan') || 0;
-    let elemenSaldo = document.getElementById('saldo-dashboard');
-    if(elemenSaldo) {
-        elemenSaldo.innerText = 'Rp ' + parseInt(saldo).toLocaleString('id-ID');
+    // 2. Muat & Tampilkan Total Pendapatan Keuangan Terakhir
+    const saldoTersimpan = localStorage.getItem('totalPendapatan') || 0;
+    const elemenPendapatan = document.getElementById('total-pendapatan');
+    if (elemenPendapatan) {
+        elemenPendapatan.innerText = 'Rp ' + parseInt(saldoTersimpan).toLocaleString('id-ID');
     }
 });
-    </script>
+</script>
+
 </body>
 </html>
